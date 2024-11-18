@@ -4,44 +4,55 @@ import tensorflow as tf
 from sklearn.preprocessing import StandardScaler
 import numpy as np
 import joblib
+
 app = Flask(__name__)
 
-# Load modelo
+# Cargar el modelo
 model = tf.keras.models.load_model("classificatorModel.h5")
 
-# Define API's route
+# Cargar el scaler
+scaler = joblib.load('scaler.pkl')
+
+# Definir la ruta para la API
 @app.route('/predict', methods=['POST'])
 def predict():
-    # Check is file exists
+    print("Request received")
+    
+    # Verificar si se ha enviado un archivo
     if 'file' not in request.files:
-        return jsonify({'error': 'No file was send'})
+        print("No file part")
+        return jsonify({'error': 'No file part'})
     
     file = request.files['file']
-
-    # Check file's name
+    
+    # Verificar si el archivo tiene un nombre
     if file.filename == '':
+        print("No selected file")
         return jsonify({'error': 'No selected file'})
     
-    # Read CSV
+    # Leer el archivo CSV
     data = pd.read_csv(file)
-
+    print("CSV data read successfully")
+    
     # Asegurarse de que las columnas coincidan con las del entrenamiento
     expected_columns = ['Temperature (K)', 'Luminosity(L/Lo)', 'Radius(R/Ro)', 'Absolute magnitude(Mv)']
     if list(data.columns) != expected_columns:
+        print("Invalid columns in CSV file")
         return jsonify({'error': 'Invalid columns in CSV file'})
     
-    # Preprocess data
-    scaler = joblib.load('scaler.pkl')
+    # Preprocesar los datos
     data_scaled = scaler.transform(data)
-
-    # Predict
+    print("Data scaled successfully")
+    
+    # Hacer predicciones
     predictions = model.predict(data_scaled)
-
-    # Convert to list
+    print("Predictions made successfully")
+    
+    # Convertir las predicciones a una lista
     predictions_list = np.argmax(predictions, axis=1).tolist()
-
-
-    # Return as JSON
+    print("Predictions converted to list")
+    
+    # Devolver las predicciones como JSON
     return jsonify({'predictions': predictions_list})
 
 if __name__ == '__main__':
