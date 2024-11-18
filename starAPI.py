@@ -51,8 +51,8 @@ def predict():
     # Convertir las predicciones a una lista
     predictions_list = np.argmax(predictions, axis=1).tolist()
     print("Predictions converted to list")
-    #
-    # Devolver las predicciones como JSON
+    
+    # Devolver las predicciones como un JSON
     return jsonify({'predictions': predictions_list})
 
 if __name__ == '__main__':
