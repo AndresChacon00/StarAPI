@@ -59,5 +59,5 @@ def predict():
     # Devolver las predicciones como un JSON
     return jsonify({'predictions': predictions_list})
 
-if __name__ == '__main__':
-    app.run(debug=True)
+#if __name__ == '__main__':
+#    app.run(debug=True)
