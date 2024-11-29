@@ -1,5 +1,19 @@
 {
-    "rewrites": [
-      { "source": "/(.*)", "destination": "/starAPI" }
-    ]
-  }
+  "version": 2,
+  "builds": [
+    {
+      "src": "api/starAPI.py",
+      "use": "@vercel/python",
+      "config": {
+        "zeroConfig": true
+      }
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "api/starAPI.py"
+    }
+  ],
+  "buildCommand": "sh build.sh"
+}
