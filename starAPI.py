@@ -17,7 +17,7 @@ scaler = joblib.load('scaler.pkl')
 def home():
     return 'Hello, World!'
 
-# Definir la ruta para la API
+# Definir la ruta para la  API
 @app.route('/predict', methods=['POST'])
 def predict():
     print("Request received")
