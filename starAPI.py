@@ -1,4 +1,5 @@
 from flask import Flask, request, jsonify
+from flask_cors import CORS
 import pandas as pd
 import tensorflow as tf
 from sklearn.preprocessing import StandardScaler
@@ -6,7 +7,7 @@ import numpy as np
 import joblib
 
 app = Flask(__name__)
-
+CORS(app)
 # Cargar el modelo
 model = tf.keras.models.load_model("classificatorModel.h5")
 
@@ -54,10 +55,10 @@ def predict():
     
     # Convertir las predicciones a una lista
     predictions_list = np.argmax(predictions, axis=1).tolist()
-    print("Predictions converted to list")
+    print("Predictions converted to list", predictions_list)
     
     # Devolver las predicciones como un JSON
     return jsonify({'predictions': predictions_list})
 
-#if __name__ == '__main__':
-#    app.run(debug=True)
+if __name__ == '__main__':
+    app.run(debug=True)
